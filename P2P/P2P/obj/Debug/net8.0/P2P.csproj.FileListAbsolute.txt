@@ -1,0 +1,14 @@
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\bin\Debug\net8.0\P2P.exe
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\bin\Debug\net8.0\P2P.deps.json
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\bin\Debug\net8.0\P2P.runtimeconfig.json
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\bin\Debug\net8.0\P2P.dll
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\bin\Debug\net8.0\P2P.pdb
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.AssemblyInfoInputs.cache
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.AssemblyInfo.cs
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.csproj.CoreCompileInputs.cache
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.dll
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\refint\P2P.dll
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.pdb
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\P2P.genruntimeconfig.cache
+C:\Users\relic\RiderProjects\P2P\P2P\P2P\obj\Debug\net8.0\ref\P2P.dll
