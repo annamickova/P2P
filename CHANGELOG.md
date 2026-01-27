@@ -9,4 +9,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [added] - 2026-1-14 - Zdeněk Relich
 
-- Implementation of DAO pattern for manipulating information about bank accounts.
+- Implementation of DAO pattern for manipulating information about bank accounts
+- Implementation of Command pattern and P2P pattern
