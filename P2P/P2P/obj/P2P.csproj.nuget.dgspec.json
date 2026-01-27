@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\relic\\RiderProjects\\P2P\\P2P\\P2P\\P2P.csproj": {}
+    "/Users/annamariemickova/Desktop/Skola/PV/P2P/P2P/P2P/P2P.csproj": {}
   },
   "projects": {
-    "C:\\Users\\relic\\RiderProjects\\P2P\\P2P\\P2P\\P2P.csproj": {
+    "/Users/annamariemickova/Desktop/Skola/PV/P2P/P2P/P2P/P2P.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\relic\\RiderProjects\\P2P\\P2P\\P2P\\P2P.csproj",
+        "projectUniqueName": "/Users/annamariemickova/Desktop/Skola/PV/P2P/P2P/P2P/P2P.csproj",
         "projectName": "P2P",
-        "projectPath": "C:\\Users\\relic\\RiderProjects\\P2P\\P2P\\P2P\\P2P.csproj",
-        "packagesPath": "C:\\Users\\relic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\relic\\RiderProjects\\P2P\\P2P\\P2P\\obj\\",
+        "projectPath": "/Users/annamariemickova/Desktop/Skola/PV/P2P/P2P/P2P/P2P.csproj",
+        "packagesPath": "/Users/annamariemickova/.nuget/packages/",
+        "outputPath": "/Users/annamariemickova/Desktop/Skola/PV/P2P/P2P/P2P/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\relic\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/annamariemickova/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -43,9 +43,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[10.0.2, )"
+            },
             "MySql.Data": {
               "target": "Package",
-              "version": "[9.6.0, )"
+              "version": "[9.5.0, )"
             }
           },
           "imports": [
@@ -64,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Users\\relic\\.dotnet\\sdk\\8.0.417/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/annamariemickova/.dotnet/sdk/8.0.401/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
