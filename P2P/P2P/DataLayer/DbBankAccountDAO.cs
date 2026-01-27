@@ -103,7 +103,25 @@ public class DbBankAccountDAO : IGenericDao<BankAccount>
         }
         
     }
-    public bool Delete(int id) { /* ... */ return false; }
+    
+    public bool Delete(int id)
+    {
+        try
+        {
+            using IDbConnection conn = _connectionFactory();
+            conn.Open();
+            using IDbCommand cmd = conn.CreateCommand();
+
+            cmd.CommandText = "delete from accounts where account_number = @id";
+        
+            AddParam(cmd, "@id", id);
+            return cmd.ExecuteNonQuery() > 0;
+        }
+        catch 
+        {
+            return false; 
+        }
+    }
 
     private void AddParam(IDbCommand cmd, string name, object value)
     {
