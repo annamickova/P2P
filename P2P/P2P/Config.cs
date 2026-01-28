@@ -40,6 +40,6 @@ public static void Load()
         string user = dbSection["User"];
         string password = dbSection["Password"];
 
-        ConnectionString = $"server={server};port={port};database={database};user={user};password={password}";
+        ConnectionString = $"server={server};port={port};database={database};user={user};password={password};";
     }
 }
