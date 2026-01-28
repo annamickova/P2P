@@ -13,15 +13,16 @@ public class AbCommand : ICommand
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
             
-            var account = BankStorageSingleton.Instance.Dao.GetById(accountId);
-            if (account == null) return Task.FromResult("ER Account doesn't exist.");
-            
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
             {
                 Node node = new(ip);
                 return node.SendRequestAsync($"AB {accountId}/{ip}")!;
             }
+            
+            var account = BankStorageSingleton.Instance.Dao.GetById(accountId);
+            if (account == null) return Task.FromResult("ER Account doesn't exist.");
+            
 
             Logger.Debug($"Balance requested for account {accountId}");
             return Task.FromResult($"AB {account.Balance}");

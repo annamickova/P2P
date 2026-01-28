@@ -14,6 +14,13 @@ public class ArCommand : ICommand
             int accountId = CommandHelper.ParseAccountId(args[0]);
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
+            
+            string ip = args[0].Split("/")[1];
+            if (ip != CommandHelper.MyIp)
+            {
+                Node node = new(ip);
+                return node.SendRequestAsync($"AR {accountId}/{ip}")!;
+            }
 
             Logger.Info($"Delete account request: {accountId}");
 
@@ -21,13 +28,6 @@ public class ArCommand : ICommand
             {
                 Logger.Error($"Account {accountId} not found.");
                 return Task.FromResult("ER Account doesn't exist.");
-            }
-
-            string ip = args[0].Split("/")[1];
-            if (ip != CommandHelper.MyIp)
-            {
-                Node node = new(ip);
-                return node.SendRequestAsync($"AR {accountId}/{ip}")!;
             }
 
             if (account.Balance != 0)

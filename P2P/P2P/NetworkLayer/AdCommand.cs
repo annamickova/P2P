@@ -15,17 +15,17 @@ public class AdCommand : ICommand
 
             long amount = CommandHelper.ParseAmount(args[1]);
 
-            var dao = BankStorageSingleton.Instance.Dao;
-            var account = dao.GetById(accountId);
-
-            if (account == null) return Task.FromResult("ER Account doesn't exist.");
-
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
             {
                 Node node = new(ip);
                 return node.SendRequestAsync($"AD {accountId}/{ip} {amount}")!;
             }
+
+            var dao = BankStorageSingleton.Instance.Dao;
+            var account = dao.GetById(accountId);
+
+            if (account == null) return Task.FromResult("ER Account doesn't exist.");
 
             account.Balance += amount;
             

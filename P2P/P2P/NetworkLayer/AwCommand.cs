@@ -15,6 +15,13 @@ public class AwCommand : ICommand
 
             long amount = CommandHelper.ParseAmount(args[1]);
             
+            string ip = args[0].Split("/")[1];
+            if (ip != CommandHelper.MyIp)
+            {
+                Node node = new(ip);
+                return node.SendRequestAsync($"AW {accountId}/{ip} {amount}")!;
+            }
+            
             Logger.Info($"Withdraw request: account {accountId}, amount {amount}");
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
@@ -22,14 +29,7 @@ public class AwCommand : ICommand
             if (account == null)
             {
                 Logger.Error($"Withdraw request: account {accountId} not found");
-                return Task.FromResult("ER Účet neexistuje.");
-            }
-            
-            string ip = args[0].Split("/")[1];
-            if (ip != CommandHelper.MyIp)
-            {
-                Node node = new(ip);
-                return node.SendRequestAsync($"AW {accountId}/{ip} {amount}")!;
+                return Task.FromResult("ER Account doesn't exist.");
             }
 
             if (account.Balance < amount)
