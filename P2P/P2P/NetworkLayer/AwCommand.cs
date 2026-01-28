@@ -12,8 +12,7 @@ public class AwCommand : ICommand
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
-            if (!long.TryParse(args[1], out long amount) || amount <= 0)
-                return Task.FromResult("ER The amount of money must be a positive whole number.");
+            long amount = CommandHelper.ParseAmount(args[1]);
 
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
