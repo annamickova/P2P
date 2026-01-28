@@ -27,24 +27,10 @@ public class Server
         while (!_tokenSource.IsCancellationRequested)
         {
             TcpClient client = await _listener.AcceptTcpClientAsync();
+            
+            Logger.WriteToConsole(LogLevel.INFO, "New client connected.");
 
-            await Task.Run(() =>
-                {
-                    using var stream = client.GetStream();
-                    stream.ReadTimeout = Config.ServerTimeout;
-                    stream.WriteTimeout = Config.ServerTimeout;
-                    using var streamReader = new StreamReader(stream, Encoding.UTF8);
-                    using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
-
-                    string input;
-                    do
-                    {
-                        input = streamReader.ReadLine()!;
-
-                        streamWriter.WriteLine(processor.Process(input));
-                    } while (input != "exit");
-                },
-                _tokenSource.Token);
+            HandleClient(client);
         }
     }
 
