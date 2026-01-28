@@ -15,7 +15,6 @@ public sealed class BankStorageSingleton
 
     private BankStorageSingleton()
     {
-        Config.Load();
         Dao = Initialize(Config.PrefferedStrategy, Config.ConnectionString); 
     }
 
