@@ -8,10 +8,11 @@ public static class Config
     public static int ServerPort { get; private set; }
     public static int PortStart { get; private set; }
     public static int PortEnd { get; private set; }
+    public static string ServerIP { get; private set; }
     public static int ServerTimeout { get; private set; }
     public static int NodeTimeout { get; private set; }
 
-public static void Load()
+    public static void Load()
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -23,6 +24,7 @@ public static void Load()
 
         var serverSection = config.GetSection("Server");
 
+        ServerIP = serverSection["IPAddress"];
         ServerPort = int.Parse(serverSection["Port"] ?? "65525");
         ServerTimeout = int.Parse(serverSection["Timeout"] ?? "10000");
 
