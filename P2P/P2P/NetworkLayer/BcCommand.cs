@@ -4,8 +4,8 @@ namespace P2P.NetworkLayer;
 
 public class BcCommand : ICommand
 {
-    public string Execute(string[] args)
+    public Task<string> ExecuteAsync(string[] args)
     {
-        return $"BC {CommandHelper.MyIp}";
+        return Task.FromResult($"BC {CommandHelper.MyIp}");
     }
 }

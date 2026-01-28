@@ -2,5 +2,5 @@
 
 public interface ICommand
 {
-    string Execute(string[] args);
+    Task<string> ExecuteAsync(string[] args);
 }

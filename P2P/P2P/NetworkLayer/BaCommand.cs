@@ -4,7 +4,7 @@ namespace P2P.NetworkLayer;
 
 public class BaCommand : ICommand
 {
-    public string Execute(string[] args)
+    public Task<string> ExecuteAsync(string[] args)
     {
         try
         {
@@ -12,11 +12,11 @@ public class BaCommand : ICommand
             
             long totalAmount = allAccounts.Sum(bankAccount => bankAccount.Balance);
 
-            return $"BA {totalAmount}";
+            return Task.FromResult($"BA {totalAmount}");
         }
         catch (Exception exception)
         {
-            return $"ER Chyba při výpočtu celkové sumy: {exception.Message}";
+            return Task.FromResult($"ER Chyba při výpočtu celkové sumy: {exception.Message}");
         }
     }
 }

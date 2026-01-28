@@ -4,17 +4,17 @@ namespace P2P.NetworkLayer;
 
 public class BnCommand : ICommand
 {
-    public string Execute(string[] args)
+    public Task<string> ExecuteAsync(string[] args)
     {
         try
         {
             var allAccounts = BankStorageSingleton.Instance.Dao.GetAll();
             
-            return $"BN {allAccounts.Count}";
+            return Task.FromResult($"BN {allAccounts.Count}");
         }
         catch (Exception exception)
         {
-            return $"ER Chyba při zjišťování počtu klientů: {exception.Message}";
+            return Task.FromResult($"ER Chyba při zjišťování počtu klientů: {exception.Message}");
         }
     }
 }

@@ -19,29 +19,27 @@ public class CommandProcessor
         };
     }
 
-    public string Process(string message)
+    public Task<string> Process(string message)
     {
-        if (string.IsNullOrWhiteSpace(message)) return "ER Prázdný příkaz.";
+        if (string.IsNullOrWhiteSpace(message)) return Task.FromResult("ER Prázdný příkaz.");
 
         var parts = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var commandName = parts[0].ToUpper();
         
-        // Získáme argumenty (všechno za prvním slovem)
         var args = parts.Skip(1).ToArray();
 
         if (_commands.TryGetValue(commandName, out var command))
         {
             try
             {
-                return command.Execute(args);
+                return command.ExecuteAsync(args);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                // Jakákoliv neošetřená chyba v logice příkazu vrátí ER
-                return $"ER Chyba při zpracování: {ex.Message}";
+                return Task.FromResult($"ER Chyba při zpracování: {exception.Message}");
             }
         }
 
-        return "ER Neznámý příkaz.";
+        return Task.FromResult("ER Neznámý příkaz.");
     }
 }

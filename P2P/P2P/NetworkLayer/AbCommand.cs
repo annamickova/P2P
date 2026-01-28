@@ -5,22 +5,29 @@ namespace P2P.NetworkLayer;
 
 public class AbCommand : ICommand
 {
-    public string Execute(string[] args)
+    public Task<string> ExecuteAsync(string[] args)
     {
-        if (args.Length != 1) return "ER Špatný počet parametrů.";
+        if (args.Length != 1) return Task.FromResult("ER Špatný počet parametrů.");
 
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
             
             var account = BankStorageSingleton.Instance.Dao.GetById(accountId);
-            if (account == null) return "ER Účet neexistuje.";
+            if (account == null) return Task.FromResult("ER Účet neexistuje.");
+            
+            string ip = args[0].Split("/")[1];
+            if (ip != CommandHelper.MyIp)
+            {
+                Node node = new(ip, 65525, 6535);
+                return node.SendRequestAsync($"AD {accountId}/{ip}")!;
+            }
 
-            return $"AB {account.Balance}";
+            return Task.FromResult($"AB {account.Balance}");
         }
         catch (Exception exception)
         {
-            return $"ER {exception.Message}";
+            return Task.FromResult($"ER {exception.Message}");
         }
     }
 }

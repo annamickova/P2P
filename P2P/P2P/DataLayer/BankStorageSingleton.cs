@@ -9,14 +9,15 @@ public sealed class BankStorageSingleton
 
     public static BankStorageSingleton Instance => Lazy.Value;
 
-    public IGenericDao<BankAccount> Dao { get; set; }
+    public IGenericDao<BankAccount> Dao { get; private set; }
 
     private BankStorageSingleton()
     {
-        Dao = new MemoryBankAccountDao(); 
+        DatabaseConfig.Load();
+        Dao = Initialize("mysql", DatabaseConfig.ConnectionString); 
     }
 
-    public void Initialize(string preferredStrategy, string connectionString = "")
+    public IGenericDao<BankAccount> Initialize(string preferredStrategy, string connectionString = "")
     {
         bool success = false;
 
@@ -69,5 +70,7 @@ public sealed class BankStorageSingleton
             Dao.Initialize();
             Console.WriteLine("[Storage] -> Running in memory. Data will disappear after shut down.");
         }
+        
+        return Dao;
     }
 }
