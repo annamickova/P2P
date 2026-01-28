@@ -27,14 +27,14 @@ public class Server
             await Task.Run(() =>
                 {
                     using var stream = client.GetStream();
+                    stream.ReadTimeout = Config.ServerTimeout;
+                    stream.WriteTimeout = Config.ServerTimeout;
                     using var streamReader = new StreamReader(stream, Encoding.UTF8);
                     using var streamWriter = new StreamWriter(stream, Encoding.UTF8);
 
                     string input;
                     do
                     {
-                        streamWriter.WriteLine("Type exit to exit, lol.");
-                        
                         input = streamReader.ReadLine()!;
 
                         streamWriter.WriteLine(processor.Process(input));

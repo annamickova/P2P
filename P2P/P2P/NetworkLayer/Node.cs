@@ -38,9 +38,9 @@ public class Node
                 await client.ConnectAsync(IP, port);
                 
                 using var stream = client.GetStream();
-                int timeout = 5000;
-                stream.ReadTimeout = timeout;
-                stream.WriteTimeout = timeout;
+                
+                stream.ReadTimeout = Config.NodeTimeout;
+                stream.WriteTimeout = Config.NodeTimeout;
 
                 _reader = new StreamReader(stream, Encoding.UTF8);
                 _writer = new StreamWriter(stream, Encoding.UTF8);
