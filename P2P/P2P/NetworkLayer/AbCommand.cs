@@ -19,7 +19,7 @@ public class AbCommand : ICommand
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
             {
-                Node node = new(ip, 65525, 6535);
+                Node node = new(ip);
                 return node.SendRequestAsync($"AD {accountId}/{ip}")!;
             }
 

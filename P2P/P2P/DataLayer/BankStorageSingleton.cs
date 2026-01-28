@@ -5,7 +5,7 @@ using MySql.Data.MySqlClient;
 
 public sealed class BankStorageSingleton
 {
-    private static readonly Lazy<BankStorageSingleton> Lazy = new(() => new BankStorageSingleton());
+    private static readonly Lazy<BankStorageSingleton> Lazy = new(() => new BankStorageSingleton(), true);
 
     public static BankStorageSingleton Instance => Lazy.Value;
 
@@ -13,8 +13,8 @@ public sealed class BankStorageSingleton
 
     private BankStorageSingleton()
     {
-        DatabaseConfig.Load();
-        Dao = Initialize("mysql", DatabaseConfig.ConnectionString); 
+        Config.Load();
+        Dao = Initialize("mysql", Config.ConnectionString); 
     }
 
     public IGenericDao<BankAccount> Initialize(string preferredStrategy, string connectionString = "")
