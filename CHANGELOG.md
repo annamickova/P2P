@@ -7,10 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
-### [added] - 2026-1-14 - Zdeněk Relich
+### [added] - 2026-1-16 - Zdeněk Relich
 
 - Implementation of DAO pattern for manipulating information about bank accounts
 
-### [added] - 2026-1-15 - Zdeněk Relich
+### [added] - 2026-1-17 - Zdeněk Relich
 
 - Implementation of Command pattern and P2P pattern
+
+### [added] - 2026-1-20 - Zdeněk Relich
+
+- Implementation of thread-safe Singleton pattern
+- Added a TCP Server
+
+### [edited]
+- Commands now work asynchronously
+- Application is now more configurable
