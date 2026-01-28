@@ -7,14 +7,14 @@ public class AbCommand : ICommand
 {
     public Task<string> ExecuteAsync(string[] args)
     {
-        if (args.Length != 1) return Task.FromResult("ER Špatný počet parametrů.");
+        if (args.Length != 1) return Task.FromResult("ER Incorrect amount of parameters.");
 
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
             
             var account = BankStorageSingleton.Instance.Dao.GetById(accountId);
-            if (account == null) return Task.FromResult("ER Účet neexistuje.");
+            if (account == null) return Task.FromResult("ER Account doesn't exist.");
             
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)

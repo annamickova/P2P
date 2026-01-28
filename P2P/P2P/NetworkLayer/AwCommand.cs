@@ -7,13 +7,13 @@ public class AwCommand : ICommand
 {
     public Task<string> ExecuteAsync(string[] args)
     {
-        if (args.Length != 2) return Task.FromResult("ER Špatný počet parametrů.");
+        if (args.Length != 2) return Task.FromResult("ER Incorrect amount of nodes.");
 
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
             if (!long.TryParse(args[1], out long amount) || amount <= 0)
-                return Task.FromResult("ER Částka musí být kladné číslo.");
+                return Task.FromResult("ER The amount of money must be a positive whole number.");
 
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
@@ -27,13 +27,13 @@ public class AwCommand : ICommand
                 return node.SendRequestAsync($"AD {accountId}/{ip} {amount}")!;
             }
 
-            if (account.Balance < amount) return Task.FromResult("ER Není dostatek finančních prostředků.");
+            if (account.Balance < amount) return Task.FromResult("ER Not enough money saved.");
 
             account.Balance -= amount;
             
             if (dao.Update(account)) return Task.FromResult("AW");
             
-            return Task.FromResult("ER Chyba databáze při výběru.");
+            return Task.FromResult("ER Error while withdrawing.");
         }
         catch (Exception exception)
         {

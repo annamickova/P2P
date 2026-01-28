@@ -15,7 +15,7 @@ public class AcCommand : ICommand
         {
             newId = rnd.Next(10000, 100000);
             attempts++;
-            if (attempts > 100) return Task.FromResult("ER Nelze vygenerovat unikátní ID.");
+            if (attempts > 100) return Task.FromResult("ER Can't generate unique ID.");
         } 
         while (BankStorageSingleton.Instance.Dao.GetById(newId) != null);
 
@@ -26,6 +26,6 @@ public class AcCommand : ICommand
             return Task.FromResult($"AC {newId}/{CommandHelper.MyIp}");
         }
         
-        return Task.FromResult("ER Chyba při ukládání účtu.");
+        return Task.FromResult("ER Error while saving an account.");
     }
 }

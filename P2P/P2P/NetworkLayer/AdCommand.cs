@@ -7,19 +7,19 @@ public class AdCommand : ICommand
 {
     public Task<string> ExecuteAsync(string[] args)
     {
-        if (args.Length != 2) return Task.FromResult("ER Špatný počet parametrů.");
+        if (args.Length != 2) return Task.FromResult("ER Incorrect amount of parameters.");
 
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0].Split("/")[0]);
             
             if (!long.TryParse(args[1], out long amount) || amount <= 0)
-                return Task.FromResult("ER Částka musí být kladné číslo.");
+                return Task.FromResult("ER The amount of money must be a positive whole number.");
 
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
 
-            if (account == null) return Task.FromResult("ER Účet neexistuje.");
+            if (account == null) return Task.FromResult("ER Account doesn't exist.");
 
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
@@ -34,7 +34,7 @@ public class AdCommand : ICommand
             {
                 return Task.FromResult("AD");
             }
-            return Task.FromResult("ER Chyba databáze při vkladu.");
+            return Task.FromResult("ER Error while depositing.");
         }
         catch (Exception exception)
         {

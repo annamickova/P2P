@@ -14,7 +14,7 @@ public class BnCommand : ICommand
         }
         catch (Exception exception)
         {
-            return Task.FromResult($"ER Chyba při zjišťování počtu klientů: {exception.Message}");
+            return Task.FromResult($"ER Error while calculating the amount of clients: {exception.Message}");
         }
     }
 }

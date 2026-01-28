@@ -16,7 +16,7 @@ public class BaCommand : ICommand
         }
         catch (Exception exception)
         {
-            return Task.FromResult($"ER Chyba při výpočtu celkové sumy: {exception.Message}");
+            return Task.FromResult($"ER Error while calculating the total amount of money: {exception.Message}");
         }
     }
 }
