@@ -21,8 +21,8 @@ public class Server
     public async Task StartAsync()
     {
         _listener.Start();
-
-        CommandProcessor processor = new();
+        
+        Logger.WriteToConsole(LogLevel.INFO, "Server is running");
         
         while (!_tokenSource.IsCancellationRequested)
         {

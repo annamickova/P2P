@@ -10,7 +10,6 @@ public static class CommandHelper
     static CommandHelper()
     {
         MyIp = GetLocalIpAddress();
-        Console.WriteLine($"[Network] Detekována IP adresa uzlu: {MyIp}");
     }
 
     private static string GetLocalIpAddress()
