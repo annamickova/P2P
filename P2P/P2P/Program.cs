@@ -6,19 +6,9 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        Config.Load();
         Logger.Configure();
         Server server = new Server();
         await server.StartAsync();
-
-        /*
-        CommandProcessor commandProcessor = new CommandProcessor();
-
-        string input;
-        do
-        {
-            input = Console.ReadLine();
-            Console.WriteLine(await commandProcessor.Process(input));
-        } while (input != "exit");
-        */
     }
 }
