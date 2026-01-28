@@ -30,3 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [edited] - 2026-1-25
 - bank_db.json is now created if it doesnt't exist
+
+### [edited] - 2025-1-27
+- fixed issues with TCP server
