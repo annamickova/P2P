@@ -5,12 +5,7 @@ namespace P2P.Utils;
 
 public static class CommandHelper
 {
-    public static string MyIp { get; private set; }
-
-    static CommandHelper()
-    {
-        MyIp = GetLocalIpAddress();
-    }
+    public static string MyIp => Config.ServerIP;
 
     private static string GetLocalIpAddress()
     {

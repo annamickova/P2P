@@ -1,4 +1,4 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using System.Text;
 using P2P.Utils;
 
@@ -19,20 +19,18 @@ public class Node
     public async Task<string?> SendRequestAsync(string command)
     {
         Logger.Debug($"Sending command to node {IP}: {command}");
-
-        TcpClient? client = await FindConnectionAsync();
-
-        if (client is null)
+            
+        var result = await FindConnectionAsync(command);
+        if (result == null)
         {
             Logger.Warning($"Failed to connect to node {IP}");
             throw new Exception();
         }
-        
-        await _writer.WriteLineAsync(command);
-        return await _reader.ReadLineAsync();
+
+        return result;
     }
 
-    private async Task<TcpClient?> FindConnectionAsync()
+    private async Task<string?> FindConnectionAsync(string command)
     {
         TcpClient client = new();
         for (int port = Config.PortStart; port <= Config.PortEnd; port++)
@@ -45,25 +43,16 @@ public class Node
                 
                 Logger.Info($"Connected to node {IP}:{port}");
                 
-                using var stream = client.GetStream();
+                await using var stream = client.GetStream();
                 
                 stream.ReadTimeout = Config.NodeTimeout;
                 stream.WriteTimeout = Config.NodeTimeout;
 
                 _reader = new StreamReader(stream, Encoding.UTF8);
-                _writer = new StreamWriter(stream, Encoding.UTF8);
-        
-                _writer.WriteLine("BC");
-
-                var peerResponse = _reader.ReadLine();
-                Logger.Debug($"Response from {IP}: {peerResponse}");
-
-                if (peerResponse is null || !peerResponse.StartsWith("BC"))
-                {
-                    continue;
-                }
+                _writer = new StreamWriter(stream, Encoding.UTF8) {AutoFlush =  true};
                 
-                return client;
+                await _writer.WriteLineAsync(command);
+                return await _reader.ReadLineAsync();
             }
             catch (ArgumentNullException argumentNullException)
             {
