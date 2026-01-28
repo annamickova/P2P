@@ -27,3 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [edited] - 2026-1-24
 - Commands return messaages in english
 - Application is now more configurable (server and node)
+
+### [edited] - 2026-1-25
+- bank_db.json is now created if it doesnt't exist
