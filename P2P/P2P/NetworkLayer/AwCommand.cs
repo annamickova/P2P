@@ -32,7 +32,7 @@ public class AwCommand : ICommand
             if (ip != CommandHelper.MyIp)
             {
                 Node node = new(ip);
-                return node.SendRequestAsync($"AD {accountId}/{ip} {amount}")!;
+                return node.SendRequestAsync($"AW {accountId}/{ip} {amount}")!;
             }
 
             if (account.Balance < amount)

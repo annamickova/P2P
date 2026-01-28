@@ -27,7 +27,7 @@ public class ArCommand : ICommand
             if (ip != CommandHelper.MyIp)
             {
                 Node node = new(ip);
-                return node.SendRequestAsync($"AD {accountId}/{ip}")!;
+                return node.SendRequestAsync($"AR {accountId}/{ip}")!;
             }
 
             if (account.Balance != 0)
