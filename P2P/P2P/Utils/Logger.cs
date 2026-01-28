@@ -1,6 +1,5 @@
 namespace P2P.Utils;
 
-
 /// <summary>
 /// Reusable logger class that writes into console and file.
 /// </summary>
@@ -17,16 +16,13 @@ public static class Logger
     /// Configure logger before first use.
     /// </summary>
     public static void Configure(string fileDirectory = "logs",
-        string fileName = "app.log",
-        bool enableConsole = true,
-        bool enableFile = true,
-        bool enableColors = true)
+        string fileName = "app.log")
     {
         _fileDirectory = fileDirectory;
         _fileName = fileName;
-        _enableConsole = enableConsole;
-        _enableFile = enableFile;
-        _enableColors = enableColors;
+        _enableConsole = Config.EnableConsole;
+        _enableFile = Config.EnableFile;
+        _enableColors = Config.EnableColors;
         
         if (_enableFile && !Directory.Exists(_fileDirectory))
         {

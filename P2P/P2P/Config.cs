@@ -11,12 +11,21 @@ public static class Config
     public static string ServerIP { get; private set; }
     public static int ServerTimeout { get; private set; }
     public static int NodeTimeout { get; private set; }
+    public static bool EnableFile { get; private set; }
+    public static bool EnableConsole { get; private set; }
+    public static bool EnableColors { get; private set; }
 
     public static void Load()
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
+
+        var loggingSection = config.GetSection("Logging");
+
+        EnableFile = bool.Parse(loggingSection["EnableFile"] ?? "true");
+        EnableConsole = bool.Parse(loggingSection["EnableFile"] ?? "false");
+        EnableColors = bool.Parse(loggingSection["EnableFile"] ?? "false");
 
         var storageSection = config.GetSection("Storage");
 
