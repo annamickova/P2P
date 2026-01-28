@@ -33,3 +33,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [edited] - 2025-1-27
 - fixed issues with TCP server
+
+### [edited] - 2025-1-28
+- fixed issues with Node (tcp client)
