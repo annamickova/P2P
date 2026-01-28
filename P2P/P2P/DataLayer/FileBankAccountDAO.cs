@@ -13,6 +13,14 @@ public class FileBankAccountDao : IGenericDao<BankAccount>
 
     public void Initialize()
     {
+        if (!File.Exists(DbFile))
+        {
+            using (var fileStream = File.Open(DbFile, FileMode.CreateNew, FileAccess.ReadWrite))
+            {
+                //ignored
+            }
+        }
+        
         if (File.Exists(DbFile))
         {
             using (var fileStream = File.Open(DbFile, FileMode.OpenOrCreate, FileAccess.Write))
