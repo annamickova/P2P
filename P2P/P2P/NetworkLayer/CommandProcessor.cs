@@ -21,7 +21,7 @@ public class CommandProcessor
 
     public Task<string> Process(string message)
     {
-        if (string.IsNullOrWhiteSpace(message)) return Task.FromResult("ER Prázdný příkaz.");
+        if (string.IsNullOrWhiteSpace(message)) return Task.FromResult("ER Empty command.");
 
         var parts = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var commandName = parts[0].ToUpper();
@@ -36,10 +36,10 @@ public class CommandProcessor
             }
             catch (Exception exception)
             {
-                return Task.FromResult($"ER Chyba při zpracování: {exception.Message}");
+                return Task.FromResult($"ER Error while computing: {exception.Message}");
             }
         }
 
-        return Task.FromResult("ER Neznámý příkaz.");
+        return Task.FromResult("ER Unknown command.");
     }
 }
