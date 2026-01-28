@@ -42,14 +42,12 @@ public sealed class BankStorageSingleton
         {
             try
             {
-                Console.WriteLine("[Storage] Attempting to initialize file storage...");
                 var fileDao = new FileBankAccountDao();
                 
                 fileDao.Initialize(); 
                 
                 Dao = fileDao;
                 success = true;
-                Console.WriteLine("[Storage] -> Successfully set file storage.");
             }
             catch (Exception)
             {
