@@ -9,7 +9,7 @@ using System.Text.Json;
 public class FileBankAccountDao : IGenericDao<BankAccount>
 {
     private const string DbFile = "bank_db.json";
-    private ConcurrentDictionary<int, BankAccount> _cache = new();
+    private ConcurrentDictionary<int, BankAccount> _storage = new();
 
     public void Initialize()
     {
@@ -24,7 +24,7 @@ public class FileBankAccountDao : IGenericDao<BankAccount>
             var list = JsonSerializer.Deserialize<List<BankAccount>>(json);
             if (list != null)
             {
-                foreach (var item in list) _cache.TryAdd(item.AccountNumber, item);
+                foreach (var item in list) _storage.TryAdd(item.AccountNumber, item);
             }
         }
     }
@@ -32,21 +32,21 @@ public class FileBankAccountDao : IGenericDao<BankAccount>
     private void SaveToFile()
     {
         var options = new JsonSerializerOptions { WriteIndented = true };
-        var json = JsonSerializer.Serialize(_cache.Values.ToList(), options);
+        var json = JsonSerializer.Serialize(_storage.Values.ToList(), options);
         File.WriteAllText(DbFile, json);
     }
 
-    public List<BankAccount> GetAll() => _cache.Values.ToList();
+    public List<BankAccount> GetAll() => _storage.Values.ToList();
 
     public BankAccount? GetById(int id)
     {
-        _cache.TryGetValue(id, out var acc);
+        _storage.TryGetValue(id, out var acc);
         return acc;
     }
 
     public bool Save(BankAccount bankAccount)
     {
-        if (_cache.TryAdd(bankAccount.AccountNumber, bankAccount))
+        if (_storage.TryAdd(bankAccount.AccountNumber, bankAccount))
         {
             SaveToFile();
             return true;
@@ -56,14 +56,14 @@ public class FileBankAccountDao : IGenericDao<BankAccount>
 
     public bool Update(BankAccount bankAccount)
     {
-        _cache[bankAccount.AccountNumber] = bankAccount;
+        _storage[bankAccount.AccountNumber] = bankAccount;
         SaveToFile();
         return true;
     }
 
     public bool Delete(int id)
     {
-        if (_cache.TryRemove(id, out _))
+        if (_storage.TryRemove(id, out _))
         {
             SaveToFile();
             return true;
