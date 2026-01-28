@@ -1,4 +1,6 @@
-﻿namespace P2P.DataLayer;
+﻿using P2P.Utils;
+
+namespace P2P.DataLayer;
 
 using System;
 using MySql.Data.MySqlClient;
@@ -31,6 +33,7 @@ public sealed class BankStorageSingleton
                 
                 Dao = dbDao;
                 success = true;
+                Logger.Info($"Storage initialized using: {preferredStrategy}");
             }
             catch (Exception)
             {

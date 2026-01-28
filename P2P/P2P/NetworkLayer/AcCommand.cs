@@ -15,7 +15,11 @@ public class AcCommand : ICommand
         {
             newId = rnd.Next(10000, 100000);
             attempts++;
-            if (attempts > 100) return Task.FromResult("ER Can't generate unique ID.");
+            if (attempts > 100)
+            {
+                Logger.Error("Failed to generate unique account ID.");
+                return Task.FromResult("ER Can't generate unique ID.");
+            }
         } 
         while (BankStorageSingleton.Instance.Dao.GetById(newId) != null);
 
@@ -23,9 +27,11 @@ public class AcCommand : ICommand
         
         if (BankStorageSingleton.Instance.Dao.Save(account))
         {
+            Logger.Info($"Account created: {newId}");
             return Task.FromResult($"AC {newId}/{CommandHelper.MyIp}");
         }
         
+        Logger.Error("Failed while saving an account.");
         return Task.FromResult("ER Error while saving an account.");
     }
 }

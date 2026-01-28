@@ -13,12 +13,20 @@ public class AwCommand : ICommand
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
             if (!long.TryParse(args[1], out long amount) || amount <= 0)
+            {
+                Logger.Warning($"Withdraw failed, wrong format of amount on account: {accountId}");
                 return Task.FromResult("ER The amount of money must be a positive whole number.");
-
+            }
+            
+            Logger.Info($"Withdraw request: account {accountId}, amount {amount}");
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
 
-            if (account == null) return Task.FromResult("ER Účet neexistuje.");
+            if (account == null)
+            {
+                Logger.Error($"Withdraw request: account {accountId} not found");
+                return Task.FromResult("ER Účet neexistuje.");
+            }
             
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
@@ -27,11 +35,18 @@ public class AwCommand : ICommand
                 return node.SendRequestAsync($"AD {accountId}/{ip} {amount}")!;
             }
 
-            if (account.Balance < amount) return Task.FromResult("ER Not enough money saved.");
+            if (account.Balance < amount)
+            {
+                Logger.Warning($"Withdraw request: account {accountId} not balanced.");
+                return Task.FromResult("ER Not enough money saved.");
+            }
 
             account.Balance -= amount;
-            
-            if (dao.Update(account)) return Task.FromResult("AW");
+            if (dao.Update(account))
+            {
+                Logger.Info($"Withdraw successful: account {accountId}, new balance {account.Balance}");
+                return Task.FromResult("AW");
+            }
             
             return Task.FromResult("ER Error while withdrawing.");
         }

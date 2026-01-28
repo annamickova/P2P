@@ -23,6 +23,7 @@ public class AbCommand : ICommand
                 return node.SendRequestAsync($"AD {accountId}/{ip}")!;
             }
 
+            Logger.Debug($"Balance requested for account {accountId}");
             return Task.FromResult($"AB {account.Balance}");
         }
         catch (Exception exception)

@@ -12,9 +12,14 @@ public class AdCommand : ICommand
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0].Split("/")[0]);
-            
+
             if (!long.TryParse(args[1], out long amount) || amount <= 0)
+            {
+                Logger.Warning("Invalid deposit amount.");
                 return Task.FromResult("ER The amount of money must be a positive whole number.");
+            }
+
+            Logger.Info($"Deposit request: account {accountId}, amount {amount}");
 
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
@@ -32,6 +37,7 @@ public class AdCommand : ICommand
             
             if (dao.Update(account))
             {
+                Logger.Info($"Deposit successful: account {accountId}, new balance {account.Balance}");
                 return Task.FromResult("AD");
             }
             return Task.FromResult("ER Error while depositing.");

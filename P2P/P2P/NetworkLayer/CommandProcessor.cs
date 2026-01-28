@@ -1,4 +1,6 @@
-﻿namespace P2P.NetworkLayer;
+﻿using P2P.Utils;
+
+namespace P2P.NetworkLayer;
 
 public class CommandProcessor
 {
@@ -21,7 +23,13 @@ public class CommandProcessor
 
     public Task<string> Process(string message)
     {
-        if (string.IsNullOrWhiteSpace(message)) return Task.FromResult("ER Prázdný příkaz.");
+        Logger.Debug($"Processing command: {message}");
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            Logger.Warning("Empty command received.");
+            return Task.FromResult("ER Prázdný příkaz.");
+        }
 
         var parts = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var commandName = parts[0].ToUpper();
@@ -36,10 +44,12 @@ public class CommandProcessor
             }
             catch (Exception exception)
             {
+                Logger.Error($"Processing failed: {exception.Message}");
                 return Task.FromResult($"ER Chyba při zpracování: {exception.Message}");
             }
         }
 
+        Logger.Warning($"Unknown command: {commandName}");
         return Task.FromResult("ER Neznámý příkaz.");
     }
 }

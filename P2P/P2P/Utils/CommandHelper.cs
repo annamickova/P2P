@@ -17,6 +17,8 @@ public static class CommandHelper
     {
         try
         {
+            Logger.Info($"Detected local IP: {MyIp}");
+
             var hostName = Dns.GetHostName();
             
             var hostEntry = Dns.GetHostEntry(hostName);
@@ -34,6 +36,7 @@ public static class CommandHelper
         catch (Exception exception)
         {
             Console.WriteLine($"[Network] Chyba při detekci IP: {exception.Message}");
+            Logger.Warning("Invalid account format received.");
             return "127.0.0.1";
         }
     }

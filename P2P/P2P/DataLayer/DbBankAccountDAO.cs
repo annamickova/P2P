@@ -1,4 +1,6 @@
-﻿namespace P2P.DataLayer;
+﻿using P2P.Utils;
+
+namespace P2P.DataLayer;
 
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ public class DbBankAccountDAO : IGenericDao<BankAccount>
         using IDbCommand cmd = conn.CreateCommand();
         cmd.CommandText = "create table if not exists accounts (account_number int primary key auto_increment, balance bigint)";
         cmd.ExecuteNonQuery();
+
     }
 
     public List<BankAccount> GetAll()

@@ -15,7 +15,13 @@ public class ArCommand : ICommand
             var dao = BankStorageSingleton.Instance.Dao;
             var account = dao.GetById(accountId);
 
-            if (account == null) return Task.FromResult("ER Account doesn't exist.");
+            Logger.Info($"Delete account request: {accountId}");
+
+            if (account == null)
+            {
+                Logger.Error($"Account {accountId} not found.");
+                return Task.FromResult("ER Account doesn't exist.");
+            }
 
             string ip = args[0].Split("/")[1];
             if (ip != CommandHelper.MyIp)
@@ -23,11 +29,20 @@ public class ArCommand : ICommand
                 Node node = new(ip);
                 return node.SendRequestAsync($"AD {accountId}/{ip}")!;
             }
-            
-            if (account.Balance != 0) return Task.FromResult("ER Cannot delete account when the amount of money is greater than 0.");
 
-            if (dao.Delete(accountId)) return Task.FromResult("AR");
+            if (account.Balance != 0)
+            {
+                Logger.Warning($"Cannot delete account {accountId} – balance not zero");
+                return Task.FromResult("ER Cannot delete account when the amount of money is greater than 0.");
+            }
+
+            if (dao.Delete(accountId))
+            {
+                Logger.Info($"Account deleted: {accountId}");
+                return Task.FromResult("AR");
+            }
             
+            Logger.Error($"Failed to delete account {accountId}");
             return Task.FromResult("ER Error while deleting.");
         }
         catch (Exception exception)

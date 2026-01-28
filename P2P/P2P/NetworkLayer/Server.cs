@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using P2P.Utils;
 
 namespace P2P.NetworkLayer;
 
@@ -16,6 +17,8 @@ public class Server
 
     public async Task StartAsync()
     {
+        Logger.Info($"Server started on port: {Config.ServerPort}");
+
         _listener.Start();
 
         CommandProcessor processor = new();
@@ -23,6 +26,7 @@ public class Server
         while (!_tokenSource.IsCancellationRequested)
         {
             TcpClient client = await _listener.AcceptTcpClientAsync();
+            Logger.Info("Client connected.");
 
             await Task.Run(() =>
                 {
@@ -36,8 +40,13 @@ public class Server
                     do
                     {
                         input = streamReader.ReadLine()!;
+                        
+                        Logger.Debug($"Received command: {input}");
 
                         streamWriter.WriteLine(processor.Process(input));
+                        
+                        Logger.Debug("Response sent to client.");
+
                     } while (input != "exit");
                 },
                 _tokenSource.Token);

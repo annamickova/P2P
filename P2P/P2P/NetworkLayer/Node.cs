@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using P2P.Utils;
 
 namespace P2P.NetworkLayer;
 
@@ -17,10 +18,13 @@ public class Node
 
     public async Task<string?> SendRequestAsync(string command)
     {
+        Logger.Debug($"Sending command to node {IP}: {command}");
+
         TcpClient? client = await FindConnectionAsync();
 
         if (client is null)
         {
+            Logger.Warning($"Failed to connect to node {IP}");
             throw new Exception();
         }
         
@@ -35,7 +39,11 @@ public class Node
         {
             try
             {
+                Logger.Debug($"Trying {IP}:{port}");
+
                 await client.ConnectAsync(IP, port);
+                
+                Logger.Info($"Connected to node {IP}:{port}");
                 
                 using var stream = client.GetStream();
                 
@@ -48,6 +56,8 @@ public class Node
                 _writer.WriteLine("BC");
 
                 var peerResponse = _reader.ReadLine();
+                Logger.Debug($"Response from {IP}: {peerResponse}");
+
                 if (peerResponse is null || !peerResponse.StartsWith("BC"))
                 {
                     continue;
