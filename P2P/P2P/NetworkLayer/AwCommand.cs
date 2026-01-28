@@ -7,16 +7,13 @@ public class AwCommand : ICommand
 {
     public Task<string> ExecuteAsync(string[] args)
     {
-        if (args.Length != 2) return Task.FromResult("ER Incorrect amount of nodes.");
+        if (args.Length != 2) return Task.FromResult("ER Incorrect amount of parameters.");
 
         try
         {
             int accountId = CommandHelper.ParseAccountId(args[0]);
-            if (!long.TryParse(args[1], out long amount) || amount <= 0)
-            {
-                Logger.Warning($"Withdraw failed, wrong format of amount on account: {accountId}");
-                return Task.FromResult("ER The amount of money must be a positive whole number.");
-            }
+
+            long amount = CommandHelper.ParseAmount(args[1]);
             
             Logger.Info($"Withdraw request: account {accountId}, amount {amount}");
             var dao = BankStorageSingleton.Instance.Dao;

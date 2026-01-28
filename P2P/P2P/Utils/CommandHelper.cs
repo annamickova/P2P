@@ -10,7 +10,6 @@ public static class CommandHelper
     static CommandHelper()
     {
         MyIp = GetLocalIpAddress();
-        Console.WriteLine($"[Network] Detekována IP adresa uzlu: {MyIp}");
     }
 
     private static string GetLocalIpAddress()
@@ -33,10 +32,9 @@ public static class CommandHelper
 
             return "127.0.0.1";
         }
-        catch (Exception exception)
+        catch (Exception)
         {
-            Console.WriteLine($"[Network] Chyba při detekci IP: {exception.Message}");
-            Logger.Warning("Invalid account format received.");
+            Logger.Warning("Invalid IP format received.");
             return "127.0.0.1";
         }
     }
@@ -44,13 +42,11 @@ public static class CommandHelper
     public static int ParseAccountId(string rawInput)
     {
         var parts = rawInput.Split('/');
-        if (parts.Length != 2) throw new Exception("Formát účtu musí být ČÍSLO/IP.");
-
-        if (parts[1] != MyIp) throw new Exception($"Účet nepatří naší bance (IP nesedí. Očekáváno: {MyIp}, Přišlo: {parts[1]}).");
+        if (parts.Length != 2) throw new Exception("The format of account must be ID/IP.");
         
-        if (!int.TryParse(parts[0], out int id)) throw new Exception("Číslo účtu není číslo.");
+        if (!int.TryParse(parts[0], out int id)) throw new Exception("Bank account ID isn't a number.");
         
-        if (id < 10000 || id > 99999) throw new Exception("Číslo účtu není v povoleném rozsahu 10000-99999.");
+        if (id < 10000 || id > 99999) throw new Exception("Bank account ID isn't in range 10000-99999.");
         
         return id;
     }
@@ -58,10 +54,10 @@ public static class CommandHelper
     public static long ParseAmount(string rawInput)
     {
         if (!long.TryParse(rawInput, out long amount)) 
-            throw new Exception("Částka není platné číslo (long).");
+            throw new Exception("The amount is not a number.");
             
         if (amount < 0) 
-            throw new Exception("Částka nesmí být záporná.");
+            throw new Exception("The amount must not be negative.");
 
         return amount;
     }
