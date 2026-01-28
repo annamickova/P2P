@@ -28,7 +28,7 @@ public class CommandProcessor
         if (string.IsNullOrWhiteSpace(message))
         {
             Logger.Warning("Empty command received.");
-            return Task.FromResult("ER Prázdný příkaz.");
+            return Task.FromResult("ER Empty command.");
         }
 
         var parts = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -45,11 +45,11 @@ public class CommandProcessor
             catch (Exception exception)
             {
                 Logger.Error($"Processing failed: {exception.Message}");
-                return Task.FromResult($"ER Chyba při zpracování: {exception.Message}");
+                return Task.FromResult($"ER Processing failed: {exception.Message}");
             }
         }
 
         Logger.Warning($"Unknown command: {commandName}");
-        return Task.FromResult("ER Neznámý příkaz.");
+        return Task.FromResult("ER Unknown command.");
     }
 }
