@@ -11,7 +11,7 @@ public class AdCommand : ICommand
 
         try
         {
-            int accountId = CommandHelper.ParseAccountId(args[0].Split("/")[0]);
+            int accountId = CommandHelper.ParseAccountId(args[0]);
 
             long amount = CommandHelper.ParseAmount(args[1]);
 
