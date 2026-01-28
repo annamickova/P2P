@@ -18,16 +18,13 @@ public static class CommandHelper
         {
             Logger.Info($"Detected local IP: {MyIp}");
 
-            var hostName = Dns.GetHostName();
-            
-            var hostEntry = Dns.GetHostEntry(hostName);
-
-            foreach (var ip in hostEntry.AddressList)
+            try
             {
-                if (ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip))
-                {
-                    return ip.ToString();
-                }
+                return IPAddress.Parse(Config.ServerIP).ToString();
+            }
+            catch (Exception)
+            {
+                Logger.Error("Invalid IP address, using 127.0.0.1");
             }
 
             return "127.0.0.1";
