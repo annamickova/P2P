@@ -1,111 +1,83 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
-using P2P.NetworkLayer;
+﻿using System.Net.Sockets;
+using System.Text;
+using Org.BouncyCastle.Tls;
+
+namespace P2P.NetworkLayer;
 
 public class Node
 {
-    private readonly int _port;
-    private TcpListener _listener;
-    
-    // Seznam připojených uzlů (IP:Port -> StreamWriter pro odesílání dat)
-    // ConcurrentDictionary je nutný, protože s ním pracuje více vláken najednou.
-    private readonly ConcurrentDictionary<string, StreamWriter> _peers = new();
+    public int StartPort { get; set; }
+    public int EndPort { get; set; }
+    public string IP { get; set; }
 
-    // Mozek banky - zde se rozhoduje, co který příkaz (BC, AC, AD...) udělá
-    private readonly CommandProcessor _processor = new CommandProcessor();
+    private StreamWriter _writer;
+    private StreamReader _reader;
 
-    public Node(int port)
+    public Node(string ip, int startPort, int endPort)
     {
-        _port = port;
+        IP = ip;
+        StartPort = startPort;
+        EndPort = endPort;
     }
-    public async Task StartServerAsync()
-    {
-        _listener = new TcpListener(IPAddress.Any, _port);
-        _listener.Start();
-        Console.WriteLine($"[P2P Server] Běží na portu {_port}. Čekám na spojení...");
 
-        while (true)
-        {
-            var client = await _listener.AcceptTcpClientAsync();
-            
-            _ = HandleClientAsync(client);
-        }
-    }
-    
-    public async Task ConnectToPeerAsync(string ip, int port)
+    public async Task<string?> SendRequestAsync(string command)
     {
-        try
-        {
-            var client = new TcpClient();
-            Console.WriteLine($"[P2P Client] Připojuji se k {ip}:{port}...");
-            
-            await client.ConnectAsync(ip, port);
-            Console.WriteLine($"[P2P Client] -> Úspěšně připojeno k {ip}:{port}!");
+        TcpClient? client = await FindConnectionAsync();
 
-            _ = HandleClientAsync(client);
-        }
-        catch (Exception ex)
+        if (client is null)
         {
-            Console.WriteLine($"[P2P Client] Chyba připojení k {ip}:{port}: {ex.Message}");
+            throw new Exception();
         }
-    }
-    
-    private async Task HandleClientAsync(TcpClient client)
-    {
-        string peerEndpoint = client.Client.RemoteEndPoint?.ToString() ?? "Unknown";
-
-        using var networkStream = client.GetStream();
-        using var reader = new StreamReader(networkStream);
         
-        using var writer = new StreamWriter(networkStream);
-        writer.AutoFlush = true;
-
-        _peers.TryAdd(peerEndpoint, writer);
-
-        try
-        {
-            string? message;
-            while ((message = await reader.ReadLineAsync()) != null)
-            {
-                Console.WriteLine($"[P2P] Příkaz od {peerEndpoint}: {message}");
-                string response = _processor.Process(message);
-
-                await writer.WriteLineAsync(response);
-                
-                Console.WriteLine($"[P2P] Odpověď pro {peerEndpoint}: {response}");
-            }
-        }
-        catch (IOException)
-        {
-            Console.WriteLine($"[P2P] Uzel {peerEndpoint} se odpojil.");
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine($"[P2P] Chyba komunikace s {peerEndpoint}: {exception.Message}");
-        }
-        finally
-        {
-            _peers.TryRemove(peerEndpoint, out _);
-            client.Close();
-        }
+        await _writer.WriteLineAsync(command);
+        return await _reader.ReadLineAsync();
     }
-    public async Task BroadcastAsync(string message)
+
+    private async Task<TcpClient?> FindConnectionAsync()
     {
-        Console.WriteLine($"[P2P Broadcast] Rozesílám všem: {message}");
-        foreach (var peer in _peers)
+        TcpClient client = new();
+        for (int port = StartPort; port <= EndPort; port++)
         {
             try
             {
-                await peer.Value.WriteLineAsync(message);
+                await client.ConnectAsync(IP, port);
+                
+                using var stream = client.GetStream();
+                int timeout = 5000;
+                stream.ReadTimeout = timeout;
+                stream.WriteTimeout = timeout;
+
+                _reader = new StreamReader(stream, Encoding.UTF8);
+                _writer = new StreamWriter(stream, Encoding.UTF8);
+        
+                _writer.WriteLine("BC");
+
+                var peerResponse = _reader.ReadLine();
+                if (peerResponse is null || !peerResponse.StartsWith("BC"))
+                {
+                    continue;
+                }
+                
+                return client;
             }
-            catch
+            catch (ArgumentNullException argumentNullException)
             {
-                // ignored
+                // The 'host' parameter is 'null'.
+            }
+            catch (ArgumentOutOfRangeException argumentOutOfRangeException)
+            {
+                // The 'port' parameter is not between 'F:System.Net.IPEndPoint.MinPort' and 'F:System.Net.IPEndPoint.MaxPort'.
+            }
+            catch (SocketException socketException)
+            {
+                // An error occurred when accessing the socket.
+            }
+            catch (ObjectDisposedException objectDisposedException)
+            {
+                // 'T:System.Net.Sockets.TcpClient' is closed.
             }
         }
+
+        return null;
     }
 }
