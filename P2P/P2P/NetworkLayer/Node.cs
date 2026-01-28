@@ -1,23 +1,18 @@
 ﻿using System.Net.Sockets;
 using System.Text;
-using Org.BouncyCastle.Tls;
 
 namespace P2P.NetworkLayer;
 
 public class Node
 {
-    public int StartPort { get; set; }
-    public int EndPort { get; set; }
     public string IP { get; set; }
 
     private StreamWriter _writer;
     private StreamReader _reader;
 
-    public Node(string ip, int startPort, int endPort)
+    public Node(string ip)
     {
         IP = ip;
-        StartPort = startPort;
-        EndPort = endPort;
     }
 
     public async Task<string?> SendRequestAsync(string command)
@@ -36,7 +31,7 @@ public class Node
     private async Task<TcpClient?> FindConnectionAsync()
     {
         TcpClient client = new();
-        for (int port = StartPort; port <= EndPort; port++)
+        for (int port = Config.PortStart; port <= Config.PortEnd; port++)
         {
             try
             {
