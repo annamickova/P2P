@@ -4,11 +4,11 @@ This application serves as a bank accounts storage. It can store data in a MySQL
 ## Requirements
 - [.net8.0](https://www.oracle.com/java/technologies/downloads/#jdk21-windows)
 - [MySQL 8.0.44](https://dev.mysql.com/downloads/installer/) 
-  - The user whose credentials are filled in the *conf/appsettings.json* file must have privileges for reading, writing, updating and deleting to use the app as intended.
+  - The user whose credentials are filled in the *bin/Debug/net8.0/appsettings.json* file must have privileges for reading, writing, updating and deleting to use the app as intended.
 ## How to run program
 **CREATE RELEASE**
 ### Configuration
-The app loads credentials from *conf/appsettings.json*. The content of the file may look something like this:
+The app loads credentials from *bin/Debug/net8.0/appsettings.json*. The content of the file may look something like this:
 ```json
 {
   "Storage":{
@@ -38,13 +38,7 @@ Do not change the JSON keys. If you do, the program will end with an error.
 ### Database setup
 Use the *database_setup/generation-script.sql* to create the database and it's table on your MySQL server.
 ### Running the binary file
-Double-click on the **.
-If nothing happens, check if you have your C# added to PATH.  
-If you have C# in PATH and the program does not start, open your terminal (*Command Prompt* on *Windows*),  
-navigate to the ** and run this command:
-```bash
-dotnet 
-```
+Double-click on the *bin/Debug/net8.0/P2P.exe*.
 ## Contact
 If you have any questions regarding this project, or you'd like to contribute, do not hesitate to contact us.
 - e-mail address: relich@post.cz
