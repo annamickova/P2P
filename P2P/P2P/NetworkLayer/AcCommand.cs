@@ -1,5 +1,6 @@
 ﻿using P2P.DataLayer;
 using P2P.Utils;
+using P2P.Monitoring;
 
 namespace P2P.NetworkLayer;
 
@@ -7,6 +8,9 @@ public class AcCommand : ICommand
 {
     public Task<string> ExecuteAsync(string[] args)
     {
+        MonitoringState.SetLastCommand("AC");
+        MonitoringState.IncrementCommands();
+
         var rnd = new Random();
         int newId;
         int attempts = 0;
@@ -17,7 +21,9 @@ public class AcCommand : ICommand
             attempts++;
             if (attempts > 100)
             {
-                Logger.Error("Failed to generate unique account ID.");
+                string error = "Failed to generate unique account ID.";
+                MonitoringState.IncrementErrors(error);
+                Logger.Error(error);
                 return Task.FromResult("ER Can't generate unique ID.");
             }
         } 
@@ -31,7 +37,9 @@ public class AcCommand : ICommand
             return Task.FromResult($"AC {newId}/{CommandHelper.MyIp}");
         }
         
-        Logger.Error("Failed while saving an account.");
+        string saveError = "Failed while saving an account.";
+        MonitoringState.IncrementErrors(saveError);
+        Logger.Error(saveError);
         return Task.FromResult("ER Error while saving an account.");
     }
 }

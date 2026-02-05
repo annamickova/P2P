@@ -1,4 +1,5 @@
 ﻿using P2P.Utils;
+using P2P.Monitoring;
 
 namespace P2P.NetworkLayer;
 
@@ -33,6 +34,8 @@ public class CommandProcessor
 
         var parts = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         var commandName = parts[0].ToUpper();
+        MonitoringState.SetLastCommand(commandName);
+        MonitoringState.IncrementCommands();
         
         var args = parts.Skip(1).ToArray();
 
@@ -44,11 +47,12 @@ public class CommandProcessor
             }
             catch (Exception exception)
             {
+                MonitoringState.IncrementErrors(exception.Message);
                 Logger.Error($"Processing failed: {exception.Message}");
                 return Task.FromResult($"ER Processing failed: {exception.Message}");
             }
         }
-
+        MonitoringState.IncrementErrors($"Unknown command: {commandName}");
         Logger.Warning($"Unknown command: {commandName}");
         return Task.FromResult("ER Unknown command.");
     }
