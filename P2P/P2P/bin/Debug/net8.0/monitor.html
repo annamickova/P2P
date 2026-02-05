@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank monitoring</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .stat:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            font-weight: bold;
+            color: #333;
+        }
+        .stat-value {
+            color: #666;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-refresh {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-refresh:hover {
+            background-color: #45a049;
+        }
+        .btn-poweroff {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-poweroff:hover {
+            background-color: #da190b;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .status-online {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-offline {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Bank monitoring</h1>
+
+    <div class="status" id="status">
+        Status: <strong id="statusText">Online</strong>
+    </div>
+
+    <div class="stat">
+        <span class="stat-label">Total commands:</span>
+        <span class="stat-value" id="totalCommands">0</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-label">Total errors:</span>
+        <span class="stat-value" id="totalErrors">0</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-label">Uptime:</span>
+        <span class="stat-value" id="uptime">0:00:00</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-label">Last command:</span>
+        <span class="stat-value" id="lastCommand">-</span>
+    </div>
+
+    <div class="stat">
+        <span class="stat-label">Last error:</span>
+        <span class="stat-value" id="lastError">-</span>
+    </div>
+
+    <div class="button-container">
+        <button class="btn-refresh" onclick="refreshStats()">Refresh</button>
+        <button class="btn-poweroff" onclick="powerOff()">Power Off</button>
+    </div>
+</div>
+
+<script>
+    async function refreshStats() {
+        try {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+
+            document.getElementById('totalCommands').textContent = data.totalCommands;
+            document.getElementById('totalErrors').textContent = data.totalErrors;
+            document.getElementById('lastCommand').textContent = data.lastCommand;
+            document.getElementById('lastError').textContent = data.lastError;
+            document.getElementById('uptime').textContent = data.uptime;
+
+            const status = document.getElementById('status');
+            status.className = 'status status-online';
+            document.getElementById('statusText').textContent = 'Online';
+        } catch (error) {
+            const status = document.getElementById('status');
+            status.className = 'status status-offline';
+            document.getElementById('statusText').textContent = 'Offline';
+        }
+    }
+
+    async function powerOff() {
+        if (!confirm('Are you sure?')) return;
+
+        try {
+            await fetch('/api/shutdown', { method: 'POST' });
+            alert('Shutting down');
+            setTimeout(() => {
+                const status = document.getElementById('status');
+                status.className = 'status status-offline';
+                document.getElementById('statusText').textContent = 'Offline';
+            }, 1000);
+        } catch (error) {
+            alert('Error: Could not shutdown');
+        }
+    }
+
+    setInterval(refreshStats, 5000);
+    refreshStats();
+</script>
+</body>
+</html>
