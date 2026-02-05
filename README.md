@@ -33,6 +33,7 @@ The app loads credentials from *bin/Debug/net8.0/appsettings.json*. The content 
   }
 }
 ```
+### Then open Monitoring on `http://localhost:8080`
 Do not change the location of this config file, or it's name. If you do, the program will end with an error.
 Do not change the JSON keys. If you do, the program will end with an error.
 ### Database setup

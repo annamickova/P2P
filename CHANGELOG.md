@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### [added] - 2026-1-14 - Anna Mičková
+
+- Created diagram
+
+### [added] - 2026-1-15 - Anna Mičková
+
+- Added Database configuration
+
 ### [added] - 2026-1-16 - Zdeněk Relich
 
 - Implementation of DAO pattern for manipulating information about bank accounts
@@ -14,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [added] - 2026-1-17 - Zdeněk Relich
 
 - Implementation of Command pattern and P2P pattern
+
+### [added] - 2026-1-17 - Anna Mičková
+
+- Logger class
 
 ### [added] - 2026-1-20 - Zdeněk Relich
 
@@ -23,6 +35,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### [edited] - 2026-1-23
 - Commands now work asynchronously
 - Application is now more configurable (server and node)
+
+### [added] - 2026-1-22 - Anna Mičková
+
+- Logging implemented into commands
 
 ### [edited] - 2026-1-24
 - Commands return messaages in english
@@ -36,3 +52,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### [edited] - 2025-1-28
 - fixed issues with Node (tcp client)
+
+### [added] - 2026-2-1 - Anna Mičková
+
+- Monitoring status
+- Monitoring logs implemented into commands
+
+### [added] - 2026-2-1 - Anna Mičková
+
+- Web page showing statistics
+
+### [edited] - 2026-2-3 - Anna Mičková
+
+- Extended documentation
