@@ -33,13 +33,13 @@ The app loads credentials from *bin/Debug/net8.0/appsettings.json*. The content 
   }
 }
 ```
-### Then open Monitoring on `http://localhost:8080`
 Do not change the location of this config file, or it's name. If you do, the program will end with an error.
 Do not change the JSON keys. If you do, the program will end with an error.
 ### Database setup
 Use the *database_setup/generation-script.sql* to create the database and it's table on your MySQL server.
 ### Running the binary file
 Double-click on the *bin/Debug/net8.0/P2P.exe*.
+### Then open Monitoring on `http://localhost:8080`
 ### Commands
 #### Overview of all allowed commands
 
